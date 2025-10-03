@@ -31,5 +31,18 @@ namespace API.Controllers
             return Ok(mapper.Map<List<ProductDto>>(products));
         }
 
+
+        [HttpGet("{id}")]
+        [Authorize(Policy = "ReadProducts")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            var product = await productRepo.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<ProductDto>(product));
+        }
+
     }
 }
