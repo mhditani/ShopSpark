@@ -1,6 +1,33 @@
 @API_HostAddress = http://localhost:5183
+@Auth_HostAddress = https://localhost:5001
 
-GET {{API_HostAddress}}/weatherforecast/
+# Request access token from IdentityServer
+# @name tokenRequest
+POST {{Auth_HostAddress}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=shopspark-password
+&client_secret=password-secret
+&grant_type=password
+&username=admin@shopspark.com
+&password=Admin123!
+&scope=openid profile email roles products.read
+
+###
+
+# Test if API is working
+GET {{API_HostAddress}}/api/test
 Accept: application/json
 
 ###
+
+# Test SimpleProducts endpoint (no auth)
+GET {{API_HostAddress}}/api/simpleproducts
+Accept: application/json
+
+###
+
+# Get all products (requires authentication)
+GET {{API_HostAddress}}/api/products
+Accept: application/json
+Authorization: Bearer {{tokenRequest.response.body.access_token}}

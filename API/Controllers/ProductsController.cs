@@ -24,7 +24,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "ReadProducts")]        
+        [Authorize(Policy = "ReadProducts")]
         public async Task<IActionResult> GetAllProducts()
         {
             var products = await productRepo.GetAllAsync();
