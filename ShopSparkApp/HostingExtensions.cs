@@ -46,11 +46,12 @@ namespace ShopSparkApp
             //builder.Services.AddRazorPages();
 
             builder.Services.AddIdentityServer()
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
-                .AddTestUsers(Config.Users)
-                .AddLicenseSummary();
+    .AddInMemoryIdentityResources(Config.IdentityResources)
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryClients(Config.Clients)
+    .AddTestUsers(Config.Users)
+    .AddDeveloperSigningCredential() // ? MAKE SURE THIS IS HERE
+    .AddLicenseSummary();
 
             return builder.Build();
         }

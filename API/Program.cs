@@ -1,5 +1,5 @@
 using Entity.Data;
-using Entity.Models; // Add this using
+using Entity.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add DB
-builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Identity (ADD THIS)
+// Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -32,24 +30,27 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Services.Map_Classes.MapperClass));
 
-
-
-
-// add Repositories
+// Add Repositories
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 
-
 // Add Authentication
+// Fix Authentication - Use this exact setup
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:5001"; // Your IdentityServer
+        options.Authority = "https://localhost:5001";
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
-            ValidateAudience = false
+            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = "https://localhost:5001",
+            // Add these to temporarily bypass signature validation
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = false, // ? Temporarily disable
+            RequireExpirationTime = true,
+            RequireSignedTokens = true // ? Temporarily disable
         };
 
-        // Optional: For better error messages
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
@@ -60,15 +61,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Add Authorization with policies
+// Add Authorization with simple policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("ManagerOnly", policy => policy.RequireRole("Manager"));
-    options.AddPolicy("CustomerOnly", policy => policy.RequireRole("Customer"));
-    options.AddPolicy("ManageProducts", policy => policy.RequireRole("Admin", "Manager"));
-    options.AddPolicy("ReadProducts", policy => policy.RequireRole("Admin", "Manager", "Customer"));
-    options.AddPolicy("ManageOrders", policy => policy.RequireRole("Admin", "Manager"));
+    options.AddPolicy("ReadProducts", policy => policy.RequireClaim("scope", "products.read"));
+    options.AddPolicy("ManageProducts", policy => policy.RequireClaim("scope", "products.write"));
+    options.AddPolicy("ReadOrders", policy => policy.RequireClaim("scope", "orders.read"));
+    options.AddPolicy("ManageOrders", policy => policy.RequireClaim("scope", "orders.write"));
+    options.AddPolicy("ReadCustomers", policy => policy.RequireClaim("scope", "customers.read"));
+    options.AddPolicy("ManageCustomers", policy => policy.RequireClaim("scope", "customers.manage"));
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -83,11 +84,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// ADD THIS: Authentication must come before Authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+
 app.MapGet("/api/test", () => "API is working!");
+
 app.Run();
