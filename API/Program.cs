@@ -20,6 +20,7 @@ builder.Services.AddAutoMapper(typeof(Services.Map_Classes.MapperClass));
 
 // Add Repositories
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 
 // Add Authentication
 // Fix Authentication - Use this exact setup
