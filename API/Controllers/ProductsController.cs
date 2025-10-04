@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity.DTO_s;
+using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,5 +45,42 @@ namespace API.Controllers
             return Ok(mapper.Map<ProductDto>(product));
         }
 
+
+
+
+        [HttpPost]
+        [Authorize(Policy = "ManageProducts")]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
+        {
+            var product = mapper.Map<Product>(productDto);
+            await productRepo.CreateAsync(product);
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, mapper.Map<ProductDto>(product));
+        }
+
+
+        [HttpPut("{id}")]
+        [Authorize(Policy = "ManageProducts")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto updateProductDto)
+        {
+           var productDomain =  mapper.Map<Product>(updateProductDto);
+            if (productDomain == null)
+            {
+                return NotFound();
+            }
+            productDomain = await productRepo.UpdateAsync(productDomain, id);
+            return Ok(mapper.Map<ProductDto>(productDomain));
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "ManageProducts")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var deletedProduct = await productRepo.DeleteAsync(id);
+            if (deletedProduct == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<ProductDto>(deletedProduct));
+        }
     }
 }

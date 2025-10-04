@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ReadProducts", policy => policy.RequireClaim("scope", "products.read"));
-    options.AddPolicy("ManageProducts", policy => policy.RequireClaim("scope", "products.write"));
+    options.AddPolicy("ManageProducts", policy => policy.RequireClaim("scope", "products.write", "products.delete"));
     options.AddPolicy("ReadOrders", policy => policy.RequireClaim("scope", "orders.read"));
     options.AddPolicy("ManageOrders", policy => policy.RequireClaim("scope", "orders.write"));
     options.AddPolicy("ReadCustomers", policy => policy.RequireClaim("scope", "customers.read"));
