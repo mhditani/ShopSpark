@@ -15,12 +15,35 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+
+
+
+
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+//{
+//    options.Password.RequireDigit = true;
+//    options.Password.RequiredLength = 6;
+//    options.Password.RequireNonAlphanumeric = false;
+//    options.Password.RequireUppercase = true;
+//    options.Password.RequireLowercase = true;
+//})
+//.AddEntityFrameworkStores<ApplicationDbContext>()
+//.AddDefaultTokenProviders();
+
+
+
+
+
+
+
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Services.Map_Classes.MapperClass));
 
 // Add Repositories
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
 
 // Add Authentication
 // Fix Authentication - Use this exact setup
@@ -57,7 +80,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManageProducts", policy => policy.RequireClaim("scope", "products.write", "products.delete"));
     options.AddPolicy("ReadOrders", policy => policy.RequireClaim("scope", "orders.read"));
     options.AddPolicy("ManageOrders", policy => policy.RequireClaim("scope", "orders.write"));
-    options.AddPolicy("ReadCustomers", policy => policy.RequireClaim("scope", "customers.read"));
+    options.AddPolicy("ReadCustomers", policy => policy.RequireClaim("scope", "customers.read", "customers.manage"));
     options.AddPolicy("ManageCustomers", policy => policy.RequireClaim("scope", "customers.manage"));
 });
 

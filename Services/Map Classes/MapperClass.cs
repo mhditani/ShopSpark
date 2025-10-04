@@ -44,6 +44,12 @@ namespace Services.Map_Classes
 
             CreateMap<UpdateOrderStatusDto, Order>().ReverseMap();
 
+
+
+            // Customer Mappings
+            CreateMap<ApplicationUser, CustomerDto>().ReverseMap();
+            CreateMap<UpdateCustomerDto, ApplicationUser>().ReverseMap();
+
         }
     }
 }

@@ -52,7 +52,7 @@ namespace ShopSparkApp
                 "products.write",
                 "orders.read",
                 "orders.write",
-                "customers.read"
+                 "customers.read", "customers.manage"
             },
             AlwaysIncludeUserClaimsInIdToken = true,
             AllowOfflineAccess = true,
