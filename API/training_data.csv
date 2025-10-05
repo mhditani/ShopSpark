@@ -1,0 +1,19 @@
+UserId,ProductId,ProductName,Category,Rating,Quantity,UnitPrice,TotalAmount
+user1,101,Smartphone,Electronics,5,1,699.99,699.99
+user1,205,Phone Case,Accessories,4,2,19.99,39.98
+user1,302,Wireless Earbuds,Electronics,5,1,129.99,129.99
+user2,450,Novel - Mystery,Books,3,1,14.99,14.99
+user2,101,Smartphone,Electronics,2,1,699.99,699.99
+user3,205,Phone Case,Accessories,5,1,19.99,19.99
+user3,550,Coffee Mug,Home,4,2,12.50,25.00
+user4,302,Wireless Earbuds,Electronics,1,1,129.99,129.99
+user5,101,Smartphone,Electronics,5,1,699.99,699.99
+user5,650,Laptop,Electronics,5,1,1299.99,1299.99
+user5,205,Phone Case,Accessories,4,1,19.99,19.99
+user6,750,Desk Lamp,Home,5,1,45.99,45.99
+user7,450,Novel - Mystery,Books,2,1,14.99,14.99
+user8,302,Wireless Earbuds,Electronics,5,1,129.99,129.99
+user8,550,Coffee Mug,Home,4,3,12.50,37.50
+user9,205,Phone Case,Accessories,1,1,19.99,19.99
+user10,650,Laptop,Electronics,5,1,1299.99,1299.99
+user10,850,Monitor,Electronics,4,2,299.99,599.98

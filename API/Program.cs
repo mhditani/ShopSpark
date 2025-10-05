@@ -30,7 +30,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //})
 //.AddEntityFrameworkStores<ApplicationDbContext>()
 //.AddDefaultTokenProviders();
-
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 
 
@@ -44,6 +46,8 @@ builder.Services.AddAutoMapper(typeof(Services.Map_Classes.MapperClass));
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+
 
 // Add Authentication
 // Fix Authentication - Use this exact setup
